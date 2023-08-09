@@ -169,8 +169,27 @@ plt.show()
 
 
 
+# Define the number of folds for cross-validation
+num_folds = 20
 
+# Create a KFold cross-validation object
+kf = KFold(n_splits=num_folds, shuffle=True, random_state=42)
 
+# Perform K-fold cross-validation
+scores = cross_val_score(xgb_model, X_train, y_train, cv=kf, scoring='accuracy')
+
+# Print the accuracy scores for each fold
+for fold_idx, score in enumerate(scores):
+    print(f"Fold {fold_idx+1}: Accuracy = {score:.4f}")
+
+# Calculate and print the average accuracy across all folds
+average_accuracy = np.mean(scores)
+print("\nAverage Accuracy:", average_accuracy)
+
+# Train the model on the full training set and evaluate on the test set
+xgb_model.fit(X_train, y_train)
+test_accuracy = xgb_model.score(X_test, y_test)
+print("Test Accuracy:", test_accuracy)
 
 
 
